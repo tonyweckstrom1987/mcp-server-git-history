@@ -1,0 +1,30 @@
+{
+  "name": "mcp-server-git-history",
+  "version": "1.0.0",
+  "description": "MCP-palvelin joka antaa tekoälyagenteille (Claude Desktop, Cursor, Windsurf) työkalut Git-historian lukemiseen ja hakemiseen.",
+  "main": "index.js",
+  "bin": {
+    "mcp-server-git-history": "bin/server.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "git",
+    "claude",
+    "ai"
+  ],
+  "author": "Tony Weckström",
+  "license": "ISC",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "simple-git": "^3.36.0",
+    "zod": "^4.5.2"
+  }
+}
