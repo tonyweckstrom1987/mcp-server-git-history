@@ -1,5 +1,9 @@
 # mcp-server-git-history
 
+[![npm version](https://img.shields.io/npm/v/mcp-server-git-history.svg)](https://www.npmjs.com/package/mcp-server-git-history)
+
+Uusin julkaistu versio: **1.0.1** — https://www.npmjs.com/package/mcp-server-git-history
+
 MCP-palvelin (Model Context Protocol) joka antaa tekoälyagenteille (Claude Desktop, Cursor, Windsurf) työkalut Git-repositorion historian lukemiseen ja hakemiseen.
 
 Ratkaisee ongelman jossa tekoäly näkee koodin nykytilan, mutta ei tiedä *miksi* jokin muuttui tai *kuka* teki muutoksen viimeksi.
