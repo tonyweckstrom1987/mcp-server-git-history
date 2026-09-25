@@ -12,7 +12,7 @@ const REPO_PATH = path.resolve(process.argv[2] || process.env.GIT_REPO_PATH || p
 
 const server = new McpServer({
   name: "mcp-server-git-history",
-  version: "1.0.0",
+  version: "1.0.1",
 });
 
 server.registerTool(
