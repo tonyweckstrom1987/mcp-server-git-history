@@ -5,6 +5,11 @@
   "bin": {
     "mcp-server-git-history": "bin/server.js"
   },
+  "files": [
+    "bin",
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "test": "node test/manual-test.js"
   },
