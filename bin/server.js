@@ -46,7 +46,11 @@ server.registerTool(
     title: "Hae commitin diffi",
     description: "Hakee tietyn commitin koko diffin (kaikki tiedostomuutokset). Käytä kun haluat nähdä TARKALLEEN mitä muuttui.",
     inputSchema: {
-      commitHash: z.string().describe("Commitin hash (lyhyt tai pitkä muoto)"),
+      // Vain heksamerkit: estää syötteen kuten "--output=..." jonka Git tulkitsisi optioksi.
+      commitHash: z
+        .string()
+        .regex(/^[0-9a-f]{4,64}$/i, "Commitin hashissa saa olla vain heksamerkkejä (0-9, a-f), 4-64 merkkiä")
+        .describe("Commitin hash (lyhyt tai pitkä muoto)"),
     },
   },
   async ({ commitHash }) => {

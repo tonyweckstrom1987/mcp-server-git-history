@@ -61,6 +61,14 @@ async function main() {
   console.log("isError:", errorResult.isError, "-", errorResult.content[0].text);
   assert.strictEqual(errorResult.isError, true, "Olemattoman tiedoston piti palauttaa virhe");
 
+  console.log("\n=== tietoturva: get_commit_diff('--output=...') ===");
+  const injectionResult = await client.callTool({
+    name: "get_commit_diff",
+    arguments: { commitHash: "--output=/tmp/mcp-git-history-injektio.txt" },
+  });
+  console.log("isError:", injectionResult.isError, "-", injectionResult.content[0].text);
+  assert.strictEqual(injectionResult.isError, true, "Optiolta näyttävä hash piti hylätä");
+
   await client.close();
   console.log("\nKaikki testit ajettu onnistuneesti.");
 }
