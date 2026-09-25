@@ -3,7 +3,7 @@ const { McpServer } = require("@modelcontextprotocol/sdk/server/mcp.js");
 const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
 const { z } = require("zod");
 const path = require("path");
-const { searchCommits, getCommitDiff, getFileHistory } = require("../lib/git-tools");
+const { searchCommits, getRecentCommits, getCommitDiff, getFileHistory } = require("../lib/git-tools");
 
 // Repositorion polku: komentoriviargumentti > GIT_REPO_PATH-ympäristömuuttuja > nykyinen hakemisto.
 // MCP-palvelin käynnistetään clientin (esim. Claude Desktop) toimesta, joten
@@ -32,6 +32,30 @@ server.registerTool(
       const results = await searchCommits(REPO_PATH, query, limit ?? 20);
       if (results.length === 0) {
         return { content: [{ type: "text", text: `Ei commiteja jotka sisältävät: "${query}"` }] };
+      }
+      return { content: [{ type: "text", text: JSON.stringify(results, null, 2) }] };
+    } catch (err) {
+      return { content: [{ type: "text", text: `Virhe: ${err.message}` }], isError: true };
+    }
+  }
+);
+
+server.registerTool(
+  "get_recent_commits",
+  {
+    title: "Hae uusimmat commitit",
+    description:
+      "Hakee repositorion uusimmat commitit uusimmasta vanhimpaan. " +
+      "Käytä kun haluat yleiskuvan siitä, mitä projektissa on viime aikoina tehty.",
+    inputSchema: {
+      limit: z.number().int().positive().max(100).optional().describe("Enintään näin monta tulosta (oletus 10)"),
+    },
+  },
+  async ({ limit }) => {
+    try {
+      const results = await getRecentCommits(REPO_PATH, limit ?? 10);
+      if (results.length === 0) {
+        return { content: [{ type: "text", text: "Repositoriossa ei ole vielä commiteja." }] };
       }
       return { content: [{ type: "text", text: JSON.stringify(results, null, 2) }] };
     } catch (err) {

@@ -19,7 +19,18 @@ async function main() {
   const tools = await client.listTools();
   console.log("=== Rekisteröidyt työkalut ===");
   console.log(tools.tools.map((t) => t.name).join(", "));
-  assert.strictEqual(tools.tools.length, 3, "Odotettiin 3 työkalua");
+  assert.strictEqual(tools.tools.length, 4, "Odotettiin 4 työkalua");
+  console.log();
+
+  console.log("=== get_recent_commits(2) ===");
+  const recentResult = await client.callTool({
+    name: "get_recent_commits",
+    arguments: { limit: 2 },
+  });
+  console.log(recentResult.content[0].text);
+  assert.ok(!recentResult.isError, "get_recent_commits palautti virheen");
+  const recent = JSON.parse(recentResult.content[0].text);
+  assert.ok(recent.length > 0 && recent.length <= 2, "limit ei toiminut");
   console.log();
 
   console.log("=== search_commits('testi') ===");

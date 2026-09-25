@@ -7,6 +7,7 @@ Ratkaisee ongelman jossa tekoäly näkee koodin nykytilan, mutta ei tiedä *miks
 ## Työkalut
 
 - **`search_commits(query, limit?)`** — etsii commiteja hakusanalla commit-viestistä
+- **`get_recent_commits(limit?)`** — hakee uusimmat commitit (yleiskuva viimeaikaisista muutoksista)
 - **`get_commit_diff(commitHash)`** — hakee yhden commitin koko diffin
 - **`get_file_history(filePath, limit?)`** — hakee tiedoston muutoshistorian (kuka, milloin, miksi)
 
@@ -39,7 +40,7 @@ npm test                                        # testaa tätä samaa repoa
 node test/manual-test.js /polku/johonkin/git-repoon   # tai jotain muuta repoa
 ```
 
-Testiskripti käynnistää palvelimen alaprosessina ja kutsuu kaikkia kolmea työkalua oikeaa MCP-protokollaa käyttäen (`@modelcontextprotocol/sdk`:n `Client` + `StdioClientTransport`), ei vain suoraan funktioita — samalla tavalla kuin Claude Desktop oikeasti kutsuisi palvelinta.
+Testiskripti käynnistää palvelimen alaprosessina ja kutsuu kaikkia työkaluja oikeaa MCP-protokollaa käyttäen (`@modelcontextprotocol/sdk`:n `Client` + `StdioClientTransport`), ei vain suoraan funktioita — samalla tavalla kuin Claude Desktop oikeasti kutsuisi palvelinta.
 
 ## Miksi tämä on ilmainen ylläpitää
 
