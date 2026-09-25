@@ -35,7 +35,8 @@ Käynnistä Claude Desktop uudelleen, ja kysy esimerkiksi: *"Milloin tiedostoa s
 git clone <repo>
 cd mcp-server-git-history
 npm install
-node test/manual-test.js /polku/johonkin/git-repoon
+npm test                                        # testaa tätä samaa repoa
+node test/manual-test.js /polku/johonkin/git-repoon   # tai jotain muuta repoa
 ```
 
 Testiskripti käynnistää palvelimen alaprosessina ja kutsuu kaikkia kolmea työkalua oikeaa MCP-protokollaa käyttäen (`@modelcontextprotocol/sdk`:n `Client` + `StdioClientTransport`), ei vain suoraan funktioita — samalla tavalla kuin Claude Desktop oikeasti kutsuisi palvelinta.
