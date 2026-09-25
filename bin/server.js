@@ -3,7 +3,7 @@ const { McpServer } = require("@modelcontextprotocol/sdk/server/mcp.js");
 const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
 const { z } = require("zod");
 const path = require("path");
-const { searchCommits, getCommitDiff, getFileHistory } = require("../lib/git-tools");
+const { searchCommits, getRecentCommits, getCommitDiff, getFileHistory } = require("../lib/git-tools");
 
 // Repositorion polku: komentoriviargumentti > GIT_REPO_PATH-ympäristömuuttuja > nykyinen hakemisto.
 // MCP-palvelin käynnistetään clientin (esim. Claude Desktop) toimesta, joten
@@ -12,7 +12,7 @@ const REPO_PATH = path.resolve(process.argv[2] || process.env.GIT_REPO_PATH || p
 
 const server = new McpServer({
   name: "mcp-server-git-history",
-  version: "1.0.0",
+  version: "1.0.1",
 });
 
 server.registerTool(
@@ -41,12 +41,40 @@ server.registerTool(
 );
 
 server.registerTool(
+  "get_recent_commits",
+  {
+    title: "Hae uusimmat commitit",
+    description:
+      "Hakee repositorion uusimmat commitit uusimmasta vanhimpaan. " +
+      "Käytä kun haluat yleiskuvan siitä, mitä projektissa on viime aikoina tehty.",
+    inputSchema: {
+      limit: z.number().int().positive().max(100).optional().describe("Enintään näin monta tulosta (oletus 10)"),
+    },
+  },
+  async ({ limit }) => {
+    try {
+      const results = await getRecentCommits(REPO_PATH, limit ?? 10);
+      if (results.length === 0) {
+        return { content: [{ type: "text", text: "Repositoriossa ei ole vielä commiteja." }] };
+      }
+      return { content: [{ type: "text", text: JSON.stringify(results, null, 2) }] };
+    } catch (err) {
+      return { content: [{ type: "text", text: `Virhe: ${err.message}` }], isError: true };
+    }
+  }
+);
+
+server.registerTool(
   "get_commit_diff",
   {
     title: "Hae commitin diffi",
     description: "Hakee tietyn commitin koko diffin (kaikki tiedostomuutokset). Käytä kun haluat nähdä TARKALLEEN mitä muuttui.",
     inputSchema: {
-      commitHash: z.string().describe("Commitin hash (lyhyt tai pitkä muoto)"),
+      // Vain heksamerkit: estää syötteen kuten "--output=..." jonka Git tulkitsisi optioksi.
+      commitHash: z
+        .string()
+        .regex(/^[0-9a-f]{4,64}$/i, "Commitin hashissa saa olla vain heksamerkkejä (0-9, a-f), 4-64 merkkiä")
+        .describe("Commitin hash (lyhyt tai pitkä muoto)"),
     },
   },
   async ({ commitHash }) => {

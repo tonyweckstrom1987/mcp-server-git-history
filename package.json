@@ -1,13 +1,12 @@
 {
   "name": "mcp-server-git-history",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP-palvelin joka antaa tekoälyagenteille (Claude Desktop, Cursor, Windsurf) työkalut Git-historian lukemiseen ja hakemiseen.",
-  "main": "index.js",
   "bin": {
     "mcp-server-git-history": "bin/server.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/manual-test.js"
   },
   "keywords": [
     "mcp",
