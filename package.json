@@ -1,6 +1,6 @@
 {
   "name": "mcp-server-git-history",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "MCP-palvelin joka antaa tekoälyagenteille (Claude Desktop, Cursor, Windsurf) työkalut Git-historian lukemiseen ja hakemiseen.",
   "bin": {
     "mcp-server-git-history": "bin/server.js"
