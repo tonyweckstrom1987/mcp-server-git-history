@@ -3,7 +3,15 @@ const { McpServer } = require("@modelcontextprotocol/sdk/server/mcp.js");
 const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
 const { z } = require("zod");
 const path = require("path");
-const { searchCommits, getRecentCommits, getCommitDiff, getFileHistory } = require("../lib/git-tools");
+const {
+  searchCommits,
+  getRecentCommits,
+  getCommitDiff,
+  getFileHistory,
+  blameFile,
+  getContributors,
+  getDiffBetweenRefs,
+} = require("../lib/git-tools");
 
 // Repositorion polku: komentoriviargumentti > GIT_REPO_PATH-ympäristömuuttuja > nykyinen hakemisto.
 // MCP-palvelin käynnistetään clientin (esim. Claude Desktop) toimesta, joten
@@ -103,6 +111,76 @@ server.registerTool(
     try {
       const results = await getFileHistory(REPO_PATH, filePath, limit ?? 20);
       return { content: [{ type: "text", text: JSON.stringify(results, null, 2) }] };
+    } catch (err) {
+      return { content: [{ type: "text", text: `Virhe: ${err.message}` }], isError: true };
+    }
+  }
+);
+
+server.registerTool(
+  "blame_file",
+  {
+    title: "Hae tiedoston blame-tiedot",
+    description:
+      "Hakee tiedoston rivikohtaisen 'git blame' -tiedon: kuka ja missä commitissa kunkin rivin viimeksi kirjoitti. " +
+      "Käytä kun haluat selvittää KUKA kirjoitti tietyn rivin ja MISSÄ commitissa se tuli mukaan.",
+    inputSchema: {
+      filePath: z.string().describe("Tiedoston polku repositorion juuresta (esim. src/index.js)"),
+      startLine: z.number().int().positive().optional().describe("Rajaa blame alkamaan tästä rivistä (annettava yhdessä endLinen kanssa)"),
+      endLine: z.number().int().positive().optional().describe("Rajaa blame päättymään tähän riviin (annettava yhdessä startLinen kanssa)"),
+    },
+  },
+  async ({ filePath, startLine, endLine }) => {
+    try {
+      const results = await blameFile(REPO_PATH, filePath, { startLine, endLine });
+      return { content: [{ type: "text", text: JSON.stringify(results, null, 2) }] };
+    } catch (err) {
+      return { content: [{ type: "text", text: `Virhe: ${err.message}` }], isError: true };
+    }
+  }
+);
+
+server.registerTool(
+  "get_contributors",
+  {
+    title: "Hae committaajayhteenveto",
+    description:
+      "Hakee yhteenvedon repositorion committaajista ja heidän commit-määristään (kuten 'git shortlog -sn'). " +
+      "Käytä kun haluat yleiskuvan siitä, KEITÄ projektissa on ollut mukana ja kuinka aktiivisia he ovat olleet.",
+    inputSchema: {
+      limit: z.number().int().positive().max(100).optional().describe("Enintään näin monta committaajaa (oletus 20)"),
+    },
+  },
+  async ({ limit }) => {
+    try {
+      const results = await getContributors(REPO_PATH, limit ?? 20);
+      if (results.length === 0) {
+        return { content: [{ type: "text", text: "Repositoriossa ei ole vielä commiteja." }] };
+      }
+      return { content: [{ type: "text", text: JSON.stringify(results, null, 2) }] };
+    } catch (err) {
+      return { content: [{ type: "text", text: `Virhe: ${err.message}` }], isError: true };
+    }
+  }
+);
+
+server.registerTool(
+  "get_diff_between_refs",
+  {
+    title: "Hae diffi kahden viitteen välillä",
+    description:
+      "Hakee diffin kahden commitin, branchin tai tagin välillä, valinnaisesti rajattuna yhteen tiedostoon. " +
+      "Käytä kun haluat verrata kahta pistettä historiassa (esim. kahta branchia tai releasea), et vain yhtä commitia.",
+    inputSchema: {
+      fromRef: z.string().min(1).describe("Lähtöviite (commit-hash, branch tai tag), esim. 'main' tai 'v1.0.0'"),
+      toRef: z.string().min(1).describe("Kohdeviite (commit-hash, branch tai tag), esim. 'HEAD'"),
+      filePath: z.string().optional().describe("Rajaa diffi tähän tiedostoon (valinnainen)"),
+    },
+  },
+  async ({ fromRef, toRef, filePath }) => {
+    try {
+      const diff = await getDiffBetweenRefs(REPO_PATH, fromRef, toRef, filePath);
+      return { content: [{ type: "text", text: diff }] };
     } catch (err) {
       return { content: [{ type: "text", text: `Virhe: ${err.message}` }], isError: true };
     }
