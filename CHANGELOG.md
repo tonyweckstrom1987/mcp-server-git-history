@@ -6,6 +6,17 @@ Muoto perustuu [Keep a Changelogiin](https://keepachangelog.com/fi/1.0.0/), ja v
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-09-26
+
+### Lisätty
+
+- `mcpName`-kenttä `package.json`:iin (`io.github.tonyweckstrom1987/git-history`) MCP-rekisterin (registry.modelcontextprotocol.io) julkaisua varten.
+- `repository`, `homepage` ja `bugs`-kentät `package.json`:iin.
+- `server.json` MCP-rekisterin skeeman mukaisesti.
+- MIT-lisenssi (`LICENSE`-tiedosto) sekä `license`-kenttä `package.json`:iin.
+
+## [1.1.0] - 2026-09-26
+
 ### Lisätty
 
 - `blame_file(filePath, startLine?, endLine?)` — rivikohtainen `git blame`: kuka ja missä commitissa kirjoitti kunkin rivin.

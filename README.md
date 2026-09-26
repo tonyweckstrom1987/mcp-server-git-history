@@ -8,6 +8,31 @@ MCP-palvelin (Model Context Protocol) joka antaa tekoälyagenteille (Claude Desk
 
 Ratkaisee ongelman jossa tekoäly näkee koodin nykytilan, mutta ei tiedä *miksi* jokin muuttui tai *kuka* teki muutoksen viimeksi.
 
+## Quick start
+
+An MCP server that gives AI agents (Claude Desktop, Cursor, Windsurf) tools to read and search Git history — commit search, file history, blame, contributors, and diffs between refs.
+
+Run it directly with `npx` (no install needed):
+
+```bash
+npx -y mcp-server-git-history /path/to/your/repo
+```
+
+Add it to Claude Desktop's config (`claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "git-history": {
+      "command": "npx",
+      "args": ["-y", "mcp-server-git-history", "/path/to/your/repo"]
+    }
+  }
+}
+```
+
+Restart Claude Desktop, then ask something like *"When was `src/index.js` last changed, and why?"*
+
 ## Työkalut
 
 - **`search_commits(query, limit?)`** — etsii commiteja hakusanalla commit-viestistä
