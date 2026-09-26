@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.tonyweckstrom1987/git-history",
-  "description": "MCP server that gives AI agents (Claude Desktop, Cursor, Windsurf) tools to read and search Git history: commit search, file history, blame, contributors, and diffs between refs.",
+  "description": "Give AI agents Git history tools: commit search, file history, blame, contributors, ref diffs.",
   "repository": {
     "url": "https://github.com/tonyweckstrom1987/mcp-server-git-history",
     "source": "github"
