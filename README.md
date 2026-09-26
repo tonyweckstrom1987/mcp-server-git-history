@@ -14,6 +14,39 @@ Ratkaisee ongelman jossa tekoäly näkee koodin nykytilan, mutta ei tiedä *miks
 - **`get_recent_commits(limit?)`** — hakee uusimmat commitit (yleiskuva viimeaikaisista muutoksista)
 - **`get_commit_diff(commitHash)`** — hakee yhden commitin koko diffin
 - **`get_file_history(filePath, limit?)`** — hakee tiedoston muutoshistorian (kuka, milloin, miksi)
+- **`blame_file(filePath, startLine?, endLine?)`** — rivikohtainen `git blame`: kuka ja missä commitissa kirjoitti kunkin rivin
+- **`get_contributors(limit?)`** — yhteenveto committaajista ja heidän commit-määristään (`git shortlog -sn`)
+- **`get_diff_between_refs(fromRef, toRef, filePath?)`** — diffi kahden commitin/branchin/tagin välillä, valinnaisesti yhteen tiedostoon rajattuna
+
+### Esimerkkikutsut
+
+```json
+{ "name": "search_commits", "arguments": { "query": "login-bugi", "limit": 10 } }
+```
+
+```json
+{ "name": "get_recent_commits", "arguments": { "limit": 5 } }
+```
+
+```json
+{ "name": "get_commit_diff", "arguments": { "commitHash": "a1b2c3d" } }
+```
+
+```json
+{ "name": "get_file_history", "arguments": { "filePath": "src/index.js", "limit": 10 } }
+```
+
+```json
+{ "name": "blame_file", "arguments": { "filePath": "src/index.js", "startLine": 10, "endLine": 25 } }
+```
+
+```json
+{ "name": "get_contributors", "arguments": { "limit": 10 } }
+```
+
+```json
+{ "name": "get_diff_between_refs", "arguments": { "fromRef": "main", "toRef": "HEAD", "filePath": "src/index.js" } }
+```
 
 ## Asennus Claude Desktopiin
 
@@ -33,6 +66,23 @@ Lisää `claude_desktop_config.json`-tiedostoon:
 Repositorion polku voidaan antaa myös `GIT_REPO_PATH`-ympäristömuuttujalla, tai jättää pois jolloin käytetään palvelimen käynnistyshakemistoa.
 
 Käynnistä Claude Desktop uudelleen, ja kysy esimerkiksi: *"Milloin tiedostoa src/index.js on viimeksi muokattu ja miksi?"*
+
+## Asennus Cursoriin
+
+Lisää projektin `.cursor/mcp.json`-tiedostoon (tai globaaliin `~/.cursor/mcp.json`-tiedostoon):
+
+```json
+{
+  "mcpServers": {
+    "git-history": {
+      "command": "npx",
+      "args": ["-y", "mcp-server-git-history", "/polku/repositorioosi"]
+    }
+  }
+}
+```
+
+Avaa Cursorin asetuksista *MCP*-välilehti ja varmista, että `git-history`-palvelin on käynnissä (vihreä piste). Sama `GIT_REPO_PATH`-ympäristömuuttuja ja komentoriviargumentti toimivat kuin Claude Desktopissa.
 
 ## Kehitys ja testaus paikallisesti
 
