@@ -1,8 +1,10 @@
 # mcp-server-git-history
 
 [![npm version](https://img.shields.io/npm/v/mcp-server-git-history.svg)](https://www.npmjs.com/package/mcp-server-git-history)
+[![CI](https://github.com/tonyweckstrom1987/mcp-server-git-history/actions/workflows/ci.yml/badge.svg)](https://github.com/tonyweckstrom1987/mcp-server-git-history/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Uusin julkaistu versio: **1.0.1** — https://www.npmjs.com/package/mcp-server-git-history
+Uusin julkaistu versio: **1.1.1** — https://www.npmjs.com/package/mcp-server-git-history
 
 MCP-palvelin (Model Context Protocol) joka antaa tekoälyagenteille (Claude Desktop, Cursor, Windsurf) työkalut Git-repositorion historian lukemiseen ja hakemiseen.
 
