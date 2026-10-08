@@ -10,6 +10,10 @@ MCP-palvelin (Model Context Protocol) joka antaa tekoälyagenteille (Claude Desk
 
 Ratkaisee ongelman jossa tekoäly näkee koodin nykytilan, mutta ei tiedä *miksi* jokin muuttui tai *kuka* teki muutoksen viimeksi.
 
+**Teknologiat:** Node.js 18/20/22/24, Model Context Protocol (stdio), simple-git, zod. Lisenssi: [LICENSE](./LICENSE).
+
+**Sisältö:** [Quick start](#quick-start) · [Työkalut](#työkalut) · [Esimerkkivastaus](#esimerkkivastaus) · [Asennus Claude Desktopiin](#asennus-claude-desktopiin) · [Asennus Cursoriin](#asennus-cursoriin) · [Kehitys ja testaus](#kehitys-ja-testaus-paikallisesti) · [Rakenne](#rakenne)
+
 ## Quick start
 
 An MCP server that gives AI agents (Claude Desktop, Cursor, Windsurf) tools to read and search Git history — commit search, file history, blame, contributors, and diffs between refs.
@@ -73,6 +77,23 @@ Restart Claude Desktop, then ask something like *"When was `src/index.js` last c
 
 ```json
 { "name": "get_diff_between_refs", "arguments": { "fromRef": "main", "toRef": "HEAD", "filePath": "src/index.js" } }
+```
+
+**Vain luku:** kaikki työkalut käyttävät ainoastaan lukevia Git-komentoja (`log`, `show`, `blame`, `shortlog`, `diff`). Palvelin ei koskaan muuta repositoriota.
+
+### Esimerkkivastaus
+
+`get_recent_commits` palauttaa JSON-listan (todellinen tulos `npm test`:stä):
+
+```json
+[
+  {
+    "hash": "bc3338e",
+    "date": "2026-10-05T14:29:43+03:00",
+    "author": "tonyweckstrom1987",
+    "message": "Upgrade GitHub Actions to latest versions"
+  }
+]
 ```
 
 ## Asennus Claude Desktopiin
