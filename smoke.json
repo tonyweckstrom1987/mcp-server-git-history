@@ -1,0 +1,8 @@
+{
+  "calls": [
+    { "tool": "get_recent_commits", "arguments": { "limit": 1 } },
+    { "tool": "get_contributors", "arguments": { "limit": 3 } },
+    { "tool": "blame_file", "arguments": { "filePath": "package.json", "startLine": 1, "endLine": 3 } },
+    { "tool": "get_diff_between_refs", "arguments": { "fromRef": "--exec=/bin/sh", "toRef": "HEAD" }, "expectError": true }
+  ]
+}

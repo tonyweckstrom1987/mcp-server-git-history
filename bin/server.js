@@ -3,6 +3,7 @@ const { McpServer } = require("@modelcontextprotocol/sdk/server/mcp.js");
 const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
 const { z } = require("zod");
 const path = require("path");
+const pkg = require("../package.json");
 const {
   searchCommits,
   getRecentCommits,
@@ -20,7 +21,7 @@ const REPO_PATH = path.resolve(process.argv[2] || process.env.GIT_REPO_PATH || p
 
 const server = new McpServer({
   name: "mcp-server-git-history",
-  version: "1.0.1",
+  version: pkg.version,
 });
 
 server.registerTool(
