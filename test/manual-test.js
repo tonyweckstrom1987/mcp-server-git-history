@@ -16,6 +16,10 @@ async function main() {
 
   console.log(`Testataan repositoriota: ${repoPath}\n`);
 
+  // Palvelimen ilmoittaman version pitää olla sama kuin package.json:n (aiemmin kovakoodattu 1.0.1 jäi jälkeen).
+  const serverVersion = client.getServerVersion();
+  assert.strictEqual(serverVersion?.version, require("../package.json").version, "Palvelimen versio ei vastaa package.json:ia");
+
   const tools = await client.listTools();
   console.log("=== Rekisteröidyt työkalut ===");
   console.log(tools.tools.map((t) => t.name).join(", "));

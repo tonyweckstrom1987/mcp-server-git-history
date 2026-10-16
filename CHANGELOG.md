@@ -6,6 +6,19 @@ Muoto perustuu [Keep a Changelogiin](https://keepachangelog.com/fi/1.0.0/), ja v
 
 ## [Unreleased]
 
+### Korjattu
+
+- Palvelin ilmoitti MCP-kättelyssä version `1.0.1`, vaikka paketti on `1.1.1`: versio luetaan nyt `package.json`:ista. Testi varmistaa, että ne täsmäävät.
+
+### Turvallisuus
+
+- Päivitetty riippuvuudet, joissa oli korkean ja kriittisen tason `npm audit` -löydöksiä: `simple-git` 4.0.2 (lähdekoodiin muutos: `const { simpleGit } = require("simple-git")`), `@modelcontextprotocol/sdk` 1.32.1 sekä välillisesti `fast-uri` ja `hono`. `npm audit --omit=dev` on nyt puhdas ja CI ajaa sen.
+
+### Lisätty
+
+- `smoke.json` ja CI-askel, joka ajaa [mcp-doctor](https://github.com/tonyweckstrom1987/mcp-doctor)-terveystarkastuksen (kättely, skeemat, savuajo ja argument injection -suojaus).
+- Dependabot (npm ja GitHub Actions, viikoittain), CI:ssä `permissions: contents: read`, `npm audit` ja Node 24 testimatriisiin.
+
 ## [1.1.1] - 2026-09-26
 
 ### Lisätty

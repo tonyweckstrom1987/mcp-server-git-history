@@ -2,7 +2,11 @@ name: CI
 
 on:
   push:
+    branches: [master]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -10,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [18.x, 20.x, 22.x, 24.x]
 
     steps:
       - name: Hae repositorio (koko historia testejä varten)
@@ -29,3 +33,15 @@ jobs:
 
       - name: Aja testit
         run: npm test
+
+      - name: Audit
+        run: npm audit --omit=dev --audit-level=high
+
+      # mcp-doctor asettaa Node 24:n, joten se ajetaan viimeisenä ja vain Node 24 -rivillä.
+      - name: MCP-terveystarkastus (mcp-doctor, savuajo)
+        if: matrix.node-version == '24.x'
+        uses: tonyweckstrom1987/mcp-doctor@7fcc3aa8881ff5894788af4a0fefec8304342af8
+        with:
+          command: node bin/server.js
+          smoke: smoke.json
+          strict: "true"
