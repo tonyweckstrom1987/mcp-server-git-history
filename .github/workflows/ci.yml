@@ -40,7 +40,7 @@ jobs:
       # mcp-doctor asettaa Node 24:n, joten se ajetaan viimeisenä ja vain Node 24 -rivillä.
       - name: MCP-terveystarkastus (mcp-doctor, savuajo)
         if: matrix.node-version == '24.x'
-        uses: tonyweckstrom1987/mcp-doctor@7fcc3aa8881ff5894788af4a0fefec8304342af8
+        uses: tonyweckstrom1987/mcp-doctor@d524fd7474cebea66c4ac904b4632ead48394ab5
         with:
           command: node bin/server.js
           smoke: smoke.json
